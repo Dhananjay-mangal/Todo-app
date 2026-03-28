@@ -3,9 +3,8 @@ import mongoose from "mongoose"
 const todoSchema = new mongoose.Schema({
     title:{
         type:String,
-        required:true,
     },
-    description:{
+    content:{
         type:String,
     },
     completed:{
@@ -13,15 +12,9 @@ const todoSchema = new mongoose.Schema({
         default:false
     },
     createdBy:{
-        type:mongoose.Schema.types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"User",
-    },
-    subTodos:[
-        {
-            type:mongoose.Schema.types.ObjectId,
-            ref:"SubTodo",
-        }
-    ]
+    }
 },{
     timestamps:true
 })

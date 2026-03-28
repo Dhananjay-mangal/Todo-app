@@ -6,7 +6,7 @@ import uploadOnCloudinary from "../utils/cloudinary.js";
 
 const generateAccessAndRefreshToken = async function(userId){
     try {
-        const user = await User.findOne(userId)
+        const user = await User.findById(userId)
         const accessToken = user.generateAccessToken()
         const refreshToken = user.generateRefreshToken()
 
@@ -103,12 +103,12 @@ const loginUser = asyncHandler(async (req,res,next)=>{
     const ValidatePassword = await user.isPasswordCorrect(password)
 
     if(!ValidatePassword){
-        throw new ApiError(402,"Invalid User credentials")
+        throw new ApiError(401,"Invalid User credentials")
     }
 
-    const {accessToken, refreshToken} = generateAccessAndRefreshToken(user._id)
+    const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id)
 
-    const loggedInUser = await User.findOne(user._id).select("-password -refreshToken")
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const options = {
         httpOnly: true,
@@ -122,7 +122,9 @@ const loginUser = asyncHandler(async (req,res,next)=>{
         new ApiResponse(
             200,
             {
-                user: loggedInUser,accessToken,refreshToken
+                user: loggedInUser,
+                accessToken,
+                refreshToken
             },
             "User Logged In Successfully!!"
         )
