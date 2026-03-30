@@ -20,7 +20,7 @@ import todoRouter from "./routes/todo.routes.js"
 
 
 // routes declaration
-app.use("/api/v1/users",userRouter)
-app.use("/api/v1/todo",todoRouter)
+app.use("/users",userRouter)
+app.use("/todo",todoRouter)
 
 export { app };
